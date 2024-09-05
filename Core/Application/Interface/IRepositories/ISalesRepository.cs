@@ -1,5 +1,4 @@
 ﻿using Domaine.Entities;
-using System.Collections.Generic;
 
 namespace Core.Application.Interface.IRepositories
 {
@@ -7,6 +6,7 @@ namespace Core.Application.Interface.IRepositories
     {
         void Add(Sale sale);
         IEnumerable<Sale> GetSales();
-        void DeleteAllSales();  // Method to delete all sales
+        void DeleteAllSales();
+        IEnumerable<MonthlyBenefit> GetMonthlyBenefits();  // Method to get monthly benefits
     }
 }

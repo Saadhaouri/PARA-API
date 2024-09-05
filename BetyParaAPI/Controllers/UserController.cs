@@ -4,7 +4,7 @@ using Core.Application.Dto_s;
 using Core.Application.Interface.IService;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class UserController : ControllerBase
 {

@@ -178,11 +178,16 @@ namespace Infra.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("SupplierId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ProductID");
 
                     b.HasIndex("CategoryID");
 
                     b.HasIndex("DebtID");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Products");
                 });
@@ -565,13 +570,13 @@ namespace Infra.Migrations
                     b.HasOne("Domaine.Entities.Order", "Order")
                         .WithMany("OrderProducts")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domaine.Entities.Product", "Product")
                         .WithMany("OrderProducts")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -591,7 +596,15 @@ namespace Infra.Migrations
                         .WithMany("Products")
                         .HasForeignKey("DebtID");
 
+                    b.HasOne("Domaine.Entities.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Domaine.Entities.ProductPromotion", b =>
@@ -599,13 +612,13 @@ namespace Infra.Migrations
                     b.HasOne("Domaine.Entities.Product", "Product")
                         .WithMany("ProductPromotions")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domaine.Entities.Promotion", "Promotion")
                         .WithMany("ProductPromotions")
                         .HasForeignKey("PromotionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Product");

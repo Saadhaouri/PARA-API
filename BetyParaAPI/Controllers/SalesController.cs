@@ -3,94 +3,109 @@ using BetyParaAPI.ViewModel;
 using Core.Application.Dto_s;
 using Core.Application.Interface.IService;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Collections.Generic;
 
-namespace BetyParaAPI.Controllers
+namespace BetyParaAPI.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class SalesController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SalesController : ControllerBase
+    private readonly ISalesService _salesService;
+    private readonly IMapper _mapper;
+
+    public SalesController(ISalesService salesService, IMapper mapper)
     {
-        private readonly ISalesService _salesService;
-        private readonly IMapper _mapper;
+        _salesService = salesService;
+        _mapper = mapper;
+    }
 
-        public SalesController(ISalesService salesService, IMapper mapper)
+    [HttpGet("daily-sales")]
+    public IActionResult GetDailySales()
+    {
+        var salesDto = _salesService.GetDailySales();
+        var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
+        return Ok(salesViewModel);
+    }
+
+    [HttpGet("weekly-sales")]
+    public IActionResult GetWeeklySales()
+    {
+        var salesDto = _salesService.GetWeeklySales();
+        var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
+        return Ok(salesViewModel);
+    }
+
+    [HttpGet("monthly-sales")]
+    public IActionResult GetMonthlySales()
+    {
+        var salesDto = _salesService.GetMonthlySales();
+        var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
+        return Ok(salesViewModel);
+    }
+
+    [HttpGet("total-daily-profit")]
+    public IActionResult GetTotalDailyProfit()
+    {
+        var totalProfit = _salesService.GetTotalDailyProfit();
+        return Ok(new { TotalDailyProfit = totalProfit });
+    }
+
+    [HttpGet("total-weekly-profit")]
+    public IActionResult GetTotalWeeklyProfit()
+    {
+        var totalProfit = _salesService.GetTotalWeeklyProfit();
+        return Ok(new { TotalWeeklyProfit = totalProfit });
+    }
+
+    [HttpGet("total-monthly-profit")]
+    public IActionResult GetTotalMonthlyProfit()
+    {
+        var totalProfit = _salesService.GetTotalMonthlyProfit();
+        return Ok(new { TotalMonthlyProfit = totalProfit });
+    }
+
+    [HttpPost]
+    public IActionResult AddSale([FromBody] AddSaleViewModel saleViewModel)
+    {
+        if (!ModelState.IsValid)
         {
-            _salesService = salesService;
-            _mapper = mapper;
+            return BadRequest(ModelState);
         }
 
-        [HttpGet("daily-sales")]
-        public IActionResult GetDailySales()
+        var saleDto = _mapper.Map<SaleDto>(saleViewModel);
+        _salesService.AddSale(saleDto);
+
+        return Ok("Sale added successfully");
+    }
+
+    [HttpGet("all-sales")]
+    public IActionResult GetAllSales()
+    {
+        var salesDto = _salesService.GetAllSales();
+        var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
+        return Ok(salesViewModel);
+    }
+
+    [HttpDelete("delete-all-sales")]
+    public IActionResult DeleteAllSales()
+    {
+        try
         {
-            var salesDto = _salesService.GetDailySales();
-            var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
-            return Ok(salesViewModel);
+            _salesService.DeleteAllSales();
+            return Ok("All sales deleted successfully");
         }
-
-        [HttpGet("weekly-sales")]
-        public IActionResult GetWeeklySales()
+        catch (Exception ex)
         {
-            var salesDto = _salesService.GetWeeklySales();
-            var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
-            return Ok(salesViewModel);
+            return StatusCode(500, $"Internal server error: {ex.Message}");
         }
+    }
 
-        [HttpGet("monthly-sales")]
-        public IActionResult GetMonthlySales()
-        {
-            var salesDto = _salesService.GetMonthlySales();
-            var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
-            return Ok(salesViewModel);
-        }
 
-        [HttpGet("total-daily-profit")]
-        public IActionResult GetTotalDailyProfit()
-        {
-            var totalProfit = _salesService.GetTotalDailyProfit();
-            return Ok(new { TotalDailyProfit = totalProfit });
-        }
-
-        [HttpGet("total-weekly-profit")]
-        public IActionResult GetTotalWeeklyProfit()
-        {
-            var totalProfit = _salesService.GetTotalWeeklyProfit();
-            return Ok(new { TotalWeeklyProfit = totalProfit });
-        }
-
-        [HttpGet("total-monthly-profit")]
-        public IActionResult GetTotalMonthlyProfit()
-        {
-            var totalProfit = _salesService.GetTotalMonthlyProfit();
-            return Ok(new { TotalMonthlyProfit = totalProfit });
-        }
-
-        [HttpPost]
-        public IActionResult AddSale([FromBody] AddSaleViewModel saleViewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var saleDto = _mapper.Map<SaleDto>(saleViewModel);
-            _salesService.AddSale(saleDto);
-
-            return Ok("Sale added successfully");
-        }
-
-        [HttpDelete("delete-all-sales")]
-        public IActionResult DeleteAllSales()
-        {
-            try
-            {
-                _salesService.DeleteAllSales();
-                return Ok("All sales deleted successfully");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
+    [HttpGet("monthly-benefits")]
+    public ActionResult<IEnumerable<MonthlyBenefitViewModel>> GetMonthlyBenefits()
+    {
+        var monthlyBenefits = _salesService.GetMonthlyBenefits();
+        return Ok(monthlyBenefits);
     }
 }

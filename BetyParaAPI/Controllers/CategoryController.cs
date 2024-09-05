@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BetyParaAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class CategoryController : ControllerBase
 {

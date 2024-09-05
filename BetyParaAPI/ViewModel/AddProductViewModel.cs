@@ -6,7 +6,7 @@ public class AddProductViewModel
     public string Description { get; set; }
     public decimal Price { get; set; }
     public decimal PriceForSale { get; set; } // New property for sale price
-
+    public Guid SupplierId { get; set; }
     public int Quantity { get; set; }
     public Guid CategoryID { get; set; }
     public DateTime DateExp { get; set; }

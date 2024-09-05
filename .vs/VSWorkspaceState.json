@@ -2,8 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\BetyParaAPI",
-    "\\Infra",
-    "\\Infra\\DATA"
+    "\\ParaCore"
   ],
   "SelectedNode": "\\BetyParaAPI\\BetyParaAPI.sln",
   "PreviewInSolutionExplorer": false

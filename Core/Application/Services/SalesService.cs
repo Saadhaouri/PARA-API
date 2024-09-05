@@ -116,4 +116,13 @@ public class SalesService : ISalesService
     {
         _salesRepository.DeleteAllSales();
     }
+    public IEnumerable<MonthlyBenefitDto> GetMonthlyBenefits()
+    {
+        var monthlyBenefits = _salesRepository.GetMonthlyBenefits();
+        return monthlyBenefits.Select(mb => new MonthlyBenefitDto
+        {
+            Month = mb.Month,
+            Benefit = mb.Benefit
+        }).ToList();
+    }
 }

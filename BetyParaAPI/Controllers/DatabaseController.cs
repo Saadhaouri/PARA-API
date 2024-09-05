@@ -4,7 +4,7 @@ using System;
 
 namespace BetyParaAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class DatabaseController : ControllerBase
     {

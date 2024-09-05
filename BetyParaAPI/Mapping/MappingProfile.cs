@@ -10,6 +10,12 @@ namespace BetyParaAPI.Mapping
     {
         public MappingProfile()
         {
+
+
+             //  benifits Month  
+
+            CreateMap<MonthlyBenefitDto ,  MonthlyBenefit>().ReverseMap();
+            CreateMap<MonthlyBenefitViewModel , MonthlyBenefitDto>().ReverseMap();
             // Product mappings
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<ProductDto, ProductViewModel>().ReverseMap();
