@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(PrDbContext))]
-    [Migration("20240608173224_the salles ")]
-    partial class thesalles
+    [Migration("20241118213510_HiDebt")]
+    partial class HiDebt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,27 +77,48 @@ namespace Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<Guid>("ClientID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("DateDebt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime>("LastDatePayee")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("avance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("rest")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("total")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("DebtID");
 
                     b.HasIndex("ClientID");
 
                     b.ToTable("Debts");
+                });
+
+            modelBuilder.Entity("Domaine.Entities.DebtProduct", b =>
+                {
+                    b.Property<Guid>("DebtId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("DebtId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("DebtProducts");
                 });
 
             modelBuilder.Entity("Domaine.Entities.Order", b =>
@@ -158,14 +179,11 @@ namespace Infra.Migrations
                     b.Property<DateTime>("DateExp")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("DebtID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsAvaible")
+                    b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -175,21 +193,41 @@ namespace Infra.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("PromotionID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<decimal>("PriceForSale")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("QRCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("SupplierId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ProductID");
 
                     b.HasIndex("CategoryID");
 
-                    b.HasIndex("DebtID");
-
-                    b.HasIndex("PromotionID");
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Domaine.Entities.ProductPromotion", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PromotionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProductId", "PromotionId");
+
+                    b.HasIndex("PromotionId");
+
+                    b.ToTable("ProductPromotions");
                 });
 
             modelBuilder.Entity("Domaine.Entities.Promotion", b =>
@@ -227,6 +265,9 @@ namespace Infra.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Profit")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -528,6 +569,25 @@ namespace Infra.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domaine.Entities.DebtProduct", b =>
+                {
+                    b.HasOne("Domaine.Entities.Debt", "Debt")
+                        .WithMany("DebtProducts")
+                        .HasForeignKey("DebtId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domaine.Entities.Product", "Product")
+                        .WithMany("DebtProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Debt");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Domaine.Entities.Order", b =>
                 {
                     b.HasOne("Domaine.Entities.Client", "Client")
@@ -552,13 +612,13 @@ namespace Infra.Migrations
                     b.HasOne("Domaine.Entities.Order", "Order")
                         .WithMany("OrderProducts")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domaine.Entities.Product", "Product")
                         .WithMany("OrderProducts")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -574,17 +634,34 @@ namespace Infra.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domaine.Entities.Debt", null)
-                        .WithMany("Products")
-                        .HasForeignKey("DebtID");
-
-                    b.HasOne("Domaine.Entities.Promotion", "promotion")
-                        .WithMany("Product")
-                        .HasForeignKey("PromotionID");
+                    b.HasOne("Domaine.Entities.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
 
-                    b.Navigation("promotion");
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Domaine.Entities.ProductPromotion", b =>
+                {
+                    b.HasOne("Domaine.Entities.Product", "Product")
+                        .WithMany("ProductPromotions")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domaine.Entities.Promotion", "Promotion")
+                        .WithMany("ProductPromotions")
+                        .HasForeignKey("PromotionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("Domaine.Entities.Sale", b =>
@@ -699,7 +776,7 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domaine.Entities.Debt", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("DebtProducts");
                 });
 
             modelBuilder.Entity("Domaine.Entities.Order", b =>
@@ -709,12 +786,16 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domaine.Entities.Product", b =>
                 {
+                    b.Navigation("DebtProducts");
+
                     b.Navigation("OrderProducts");
+
+                    b.Navigation("ProductPromotions");
                 });
 
             modelBuilder.Entity("Domaine.Entities.Promotion", b =>
                 {
-                    b.Navigation("Product");
+                    b.Navigation("ProductPromotions");
                 });
 
             modelBuilder.Entity("Domaine.Entities.Supplier", b =>

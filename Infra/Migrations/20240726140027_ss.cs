@@ -5,7 +5,7 @@
 namespace Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class _6th : Migration
+    public partial class ss : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

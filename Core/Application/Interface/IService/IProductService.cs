@@ -14,6 +14,9 @@ public interface IProductService
     // Sale Method
     void SellProduct(Guid productId, int quantity);
     // Purchase Method
+
+    decimal GetTotalValueOfProducts();
+
     void PurchaseProduct(Guid productId, int quantity);
     // Check Stock Method
     int CheckStock(Guid productId);

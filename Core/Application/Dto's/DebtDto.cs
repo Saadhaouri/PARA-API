@@ -4,11 +4,17 @@ namespace Core.Application.Dto_s
 {
     public class DebtDto
     {
+        public Guid DebtID { get; set; }
         public Guid ClientID { get; set; }
-        public List<Guid> ProductIDs { get; set; }  // List of product IDs
-        public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime LastDatePayee { get; set; }
+
+        public decimal total { get; set; }
+        public DateTime DateDebt { get; set; }
         public string Status { get; set; }
+        public decimal avance { get; set; }
+        public decimal rest { get; set; }
+        public List<Guid> ProductIds { get; set; }
+
+
     }
 }

@@ -3,11 +3,11 @@ using BetyParaAPI.ViewModel;
 using Core.Application.Dto_s;
 using Core.Application.Interface.IService;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Collections.Generic;
 
 namespace BetyParaAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class SalesController : ControllerBase
 {
@@ -77,5 +77,35 @@ public class SalesController : ControllerBase
         _salesService.AddSale(saleDto);
 
         return Ok("Sale added successfully");
+    }
+
+    [HttpGet("all-sales")]
+    public IActionResult GetAllSales()
+    {
+        var salesDto = _salesService.GetAllSales();
+        var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
+        return Ok(salesViewModel);
+    }
+
+    [HttpDelete("delete-all-sales")]
+    public IActionResult DeleteAllSales()
+    {
+        try
+        {
+            _salesService.DeleteAllSales();
+            return Ok("All sales deleted successfully");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+
+    [HttpGet("monthly-benefits")]
+    public ActionResult<IEnumerable<MonthlyBenefitViewModel>> GetMonthlyBenefits()
+    {
+        var monthlyBenefits = _salesService.GetMonthlyBenefits();
+        return Ok(monthlyBenefits);
     }
 }

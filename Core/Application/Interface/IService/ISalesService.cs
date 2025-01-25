@@ -12,5 +12,8 @@ namespace Core.Application.Interface.IService
         decimal GetTotalDailyProfit();
         decimal GetTotalWeeklyProfit();
         decimal GetTotalMonthlyProfit();
+        IEnumerable<SaleDto> GetAllSales();
+        void DeleteAllSales();
+        IEnumerable<MonthlyBenefitDto> GetMonthlyBenefits();  // Method to get monthly benefits
     }
 }

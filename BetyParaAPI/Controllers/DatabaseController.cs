@@ -1,22 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.IO;
 using System;
 
 namespace BetyParaAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class DatabaseController : ControllerBase
     {
+        private string GetBackupPath(string backupFileName)
+        {
+            string basePath = @"C:\Program Files\Microsoft SQL Server";
+            var directories = Directory.GetDirectories(basePath, "MSSQL*");
+
+            if (directories.Length > 0)
+            {
+                string sqlInstancePath = directories[0];
+                return Path.Combine(sqlInstancePath, "MSSQL", "Backup", backupFileName);
+            }
+
+            throw new DirectoryNotFoundException("SQL Server instance directory not found.");
+        }
+
         [HttpGet("backup")]
         public IActionResult BackupDatabase()
         {
-            var backupPath = @"C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVERHAOUIR\MSSQL\Backup\Para.bak"; // Ensure this path is accessible and writable.
             var dbName = "Para";
+            string backupFileName = "Para.bak";
 
             try
             {
-                string sqlCommand = $"/C sqlcmd -S HAOURI\\MSSQLSERVERHAOUI -Q \"BACKUP DATABASE [{dbName}] TO DISK='{backupPath}' WITH NOFORMAT, NOINIT, NAME='{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS=10\"";
+                string backupPath = GetBackupPath(backupFileName);
+                string sqlCommand = $"/C sqlcmd -S DESKTOP-1PPINIT\\SQLEXPRESS -Q \"BACKUP DATABASE [{dbName}] TO DISK='{backupPath}' WITH NOFORMAT, NOINIT, NAME='{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS=10\"";
 
                 using (Process process = new Process())
                 {
@@ -51,12 +67,13 @@ namespace BetyParaAPI.Controllers
         [HttpGet("import")]
         public IActionResult ImportDatabase()
         {
-            var backupPath = @"C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVERHAOUIR\MSSQL\Backup\Para.bak"; // Path to the backup file.
             var dbName = "Para";
+            string backupFileName = "Para.bak";
 
             try
             {
-                string sqlCommand = $"/C sqlcmd -S HAOURI\\MSSQLSERVERHAOUI -Q \"RESTORE DATABASE [{dbName}] FROM DISK='{backupPath}' WITH REPLACE\"";
+                string backupPath = GetBackupPath(backupFileName);
+                string sqlCommand = $"/C sqlcmd -S DESKTOP-1PPINIT\\SQLEXPRESS -Q \"RESTORE DATABASE [{dbName}] FROM DISK='{backupPath}' WITH REPLACE\"";
 
                 using (Process process = new Process())
                 {

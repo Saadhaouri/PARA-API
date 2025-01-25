@@ -33,6 +33,10 @@ namespace Core.Application.Services
             var products = _productRepository.GetProducts();
             return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
+        public decimal GetTotalValueOfProducts()
+        {
+            return _productRepository.GetTotalValueOfProducts();
+        }
 
         public ProductDto GetProductById(Guid productId)
         {
@@ -56,14 +60,16 @@ namespace Core.Application.Services
             }
 
             product.Name = productDto.Name;
+            product.QRCode  = productDto.QRCode;
             product.Description = productDto.Description;
             product.Price = productDto.Price;
+            product.PriceForSale = productDto.PriceForSale;
             product.CategoryID = productDto.CategoryID;
+            product.SupplierId = productDto.SupplierId;
             product.Quantity = productDto.Quantity;
             product.DateExp = productDto.DateExp;
 
-            // Map updated values to the existing entity
-            //await _productRepository.UpdateProduct(category);
+          
             _productRepository.Save();
         }
 
@@ -112,10 +118,10 @@ namespace Core.Application.Services
         public IEnumerable<ProductDto> GetProductsExpiringWithinAMonth()
         {
             var currentDate = DateTime.Now;
-            var oneMonthLater = currentDate.AddMonths(1);
+            var sixMonthLater = currentDate.AddMonths(6);
 
             var products = _productRepository.GetProducts()
-                .Where(p => p.DateExp <= oneMonthLater && p.DateExp > currentDate);
+                .Where(p => p.DateExp <= sixMonthLater && p.DateExp > currentDate);
 
             return _mapper.Map<IEnumerable<ProductDto>>(products);
         }

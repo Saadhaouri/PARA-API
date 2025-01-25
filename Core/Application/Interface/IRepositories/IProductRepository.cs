@@ -13,10 +13,12 @@ namespace Core.Application.Interface.IRepositories;
         void DeleteProduct(Guid productId);
         void Save();
 
-        // Additional methods for sales, purchases, and stock management
+    // Additional methods for sales, purchases, and stock management 
+    decimal GetTotalValueOfProducts();
 
-        // Sale Method
-        void SellProduct(Guid productId, int quantity);
+
+    // Sale Method
+    void SellProduct(Guid productId, int quantity);
 
         // Purchase Method
         void PurchaseProduct(Guid productId, int quantity);

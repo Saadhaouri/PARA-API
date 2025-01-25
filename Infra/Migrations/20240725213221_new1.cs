@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class updown1 : Migration
+    public partial class new1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -98,6 +98,21 @@ namespace Infra.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Promotions", x => x.PromotionID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Suppliers",
+                columns: table => new
+                {
+                    SupplierID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Suppliers", x => x.SupplierID);
                 });
 
             migrationBuilder.CreateTable(
@@ -233,19 +248,26 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SupplierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.OrderID);
                     table.ForeignKey(
-                        name: "FK_Orders_Clients_ClientID",
-                        column: x => x.ClientID,
+                        name: "FK_Orders_Clients_ClientId",
+                        column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "ClientID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Suppliers_SupplierId",
+                        column: x => x.SupplierId,
+                        principalTable: "Suppliers",
+                        principalColumn: "SupplierID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -257,14 +279,13 @@ namespace Infra.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PriceForSale = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SupplierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateExp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsAvaible = table.Column<bool>(type: "bit", nullable: false),
-                    PromotionID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DebtID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    DebtID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -281,15 +302,76 @@ namespace Infra.Migrations
                         principalTable: "Debts",
                         principalColumn: "DebtID");
                     table.ForeignKey(
-                        name: "FK_Products_Orders_OrderID",
-                        column: x => x.OrderID,
+                        name: "FK_Products_Suppliers_SupplierId",
+                        column: x => x.SupplierId,
+                        principalTable: "Suppliers",
+                        principalColumn: "SupplierID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderProducts",
+                columns: table => new
+                {
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderProducts", x => new { x.OrderId, x.ProductId });
+                    table.ForeignKey(
+                        name: "FK_OrderProducts_Orders_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "OrderID");
                     table.ForeignKey(
-                        name: "FK_Products_Promotions_PromotionID",
-                        column: x => x.PromotionID,
+                        name: "FK_OrderProducts_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductPromotions",
+                columns: table => new
+                {
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PromotionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductPromotions", x => new { x.ProductId, x.PromotionId });
+                    table.ForeignKey(
+                        name: "FK_ProductPromotions_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductID");
+                    table.ForeignKey(
+                        name: "FK_ProductPromotions_Promotions_PromotionId",
+                        column: x => x.PromotionId,
                         principalTable: "Promotions",
-                        principalColumn: "PromotionID",
+                        principalColumn: "PromotionID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sales",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Profit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SaleDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sales_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -338,9 +420,24 @@ namespace Infra.Migrations
                 column: "ClientID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ClientID",
+                name: "IX_OrderProducts_ProductId",
+                table: "OrderProducts",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ClientId",
                 table: "Orders",
-                column: "ClientID");
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_SupplierId",
+                table: "Orders",
+                column: "SupplierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPromotions_PromotionId",
+                table: "ProductPromotions",
+                column: "PromotionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryID",
@@ -353,14 +450,14 @@ namespace Infra.Migrations
                 column: "DebtID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_OrderID",
+                name: "IX_Products_SupplierId",
                 table: "Products",
-                column: "OrderID");
+                column: "SupplierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_PromotionID",
-                table: "Products",
-                column: "PromotionID");
+                name: "IX_Sales_ProductId",
+                table: "Sales",
+                column: "ProductId");
         }
 
         /// <inheritdoc />
@@ -382,7 +479,13 @@ namespace Infra.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "OrderProducts");
+
+            migrationBuilder.DropTable(
+                name: "ProductPromotions");
+
+            migrationBuilder.DropTable(
+                name: "Sales");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -391,16 +494,22 @@ namespace Infra.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Promotions");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Debts");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Promotions");
+                name: "Suppliers");
 
             migrationBuilder.DropTable(
                 name: "Clients");

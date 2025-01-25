@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BetyParaAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;

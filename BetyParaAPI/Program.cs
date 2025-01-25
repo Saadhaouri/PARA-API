@@ -8,10 +8,10 @@ using Infra.DATA;
 using Infra.Repository;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.SqlServer.Management.Smo.Wmi;
 using Para.Infrastructure.Repository;
 using System.Text;
 
@@ -70,6 +70,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ISalesRepository, SalesRepository>();
 builder.Services.AddScoped<ISalesService, SalesService>();
+builder.Services.AddScoped<IDebtService, DebtService>();    
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -78,6 +79,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IPromotionService, PromotionService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IDebtRepository , DebtRepository>();
+
 //builder.Services.AddScoped<IAddressService , AddressService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddCors(options =>
@@ -95,11 +98,17 @@ builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+
 
 app.UseHttpsRedirection();
 

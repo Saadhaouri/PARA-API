@@ -6,41 +6,48 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class hby2 : Migration
+    public partial class Qr : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Products_Orders_OrderID",
+                name: "FK_Products_Debts_DebtID",
                 table: "Products");
 
             migrationBuilder.DropIndex(
-                name: "IX_Products_OrderID",
+                name: "IX_Products_DebtID",
                 table: "Products");
 
             migrationBuilder.DropColumn(
-                name: "OrderID",
+                name: "DebtID",
                 table: "Products");
 
+            migrationBuilder.AddColumn<string>(
+                name: "QRCode",
+                table: "Products",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
             migrationBuilder.CreateTable(
-                name: "OrderProducts",
+                name: "DebtProducts",
                 columns: table => new
                 {
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DebtId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProducts", x => new { x.OrderId, x.ProductId });
+                    table.PrimaryKey("PK_DebtProducts", x => new { x.DebtId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_OrderProducts_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "OrderID",
+                        name: "FK_DebtProducts_Debts_DebtId",
+                        column: x => x.DebtId,
+                        principalTable: "Debts",
+                        principalColumn: "DebtID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderProducts_Products_ProductId",
+                        name: "FK_DebtProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductID",
@@ -48,8 +55,8 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProducts_ProductId",
-                table: "OrderProducts",
+                name: "IX_DebtProducts_ProductId",
+                table: "DebtProducts",
                 column: "ProductId");
         }
 
@@ -57,25 +64,29 @@ namespace Infra.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OrderProducts");
+                name: "DebtProducts");
+
+            migrationBuilder.DropColumn(
+                name: "QRCode",
+                table: "Products");
 
             migrationBuilder.AddColumn<Guid>(
-                name: "OrderID",
+                name: "DebtID",
                 table: "Products",
                 type: "uniqueidentifier",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_OrderID",
+                name: "IX_Products_DebtID",
                 table: "Products",
-                column: "OrderID");
+                column: "DebtID");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Products_Orders_OrderID",
+                name: "FK_Products_Debts_DebtID",
                 table: "Products",
-                column: "OrderID",
-                principalTable: "Orders",
-                principalColumn: "OrderID");
+                column: "DebtID",
+                principalTable: "Debts",
+                principalColumn: "DebtID");
         }
     }
 }
