@@ -33,6 +33,10 @@ namespace Core.Application.Services
             var products = _productRepository.GetProducts();
             return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
+        public decimal GetTotalValueOfProducts()
+        {
+            return _productRepository.GetTotalValueOfProducts();
+        }
 
         public ProductDto GetProductById(Guid productId)
         {
@@ -56,6 +60,7 @@ namespace Core.Application.Services
             }
 
             product.Name = productDto.Name;
+            product.QRCode  = productDto.QRCode;
             product.Description = productDto.Description;
             product.Price = productDto.Price;
             product.PriceForSale = productDto.PriceForSale;

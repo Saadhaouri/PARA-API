@@ -83,6 +83,18 @@ namespace BetyParaAPI.Mapping
 
             CreateMap<SaleDto, SaleViewModel>().ReverseMap();
             CreateMap<SaleDto, AddSaleViewModel>().ReverseMap();
+
+            // Debt mappings
+            CreateMap<Debt, DebtDto>()
+                .ForMember(dest => dest.ProductIds, opt => opt.MapFrom(src => src.DebtProducts.Select(dp => dp.ProductId).ToList()))
+                .ReverseMap()
+                .ForMember(dest => dest.DebtProducts, opt => opt.Ignore()); // Ignoring DebtProducts for reverse mapping, handle separately if needed
+
+            CreateMap<DebtDto, DebtViewModel>().ReverseMap();
+            CreateMap<CreateDebtDto, CreateDebtViewModel>().ReverseMap();
+            CreateMap<CreateDebtDto, Debt>().ReverseMap();
+
+
         }
     }
 }

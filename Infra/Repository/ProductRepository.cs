@@ -55,6 +55,13 @@ public class ProductRepository : IProductRepository
     }
 
     // Additional methods for sales, purchases, and stock management
+    public decimal GetTotalValueOfProducts()
+    {
+        return _dbContext.Products
+     .Where(product => product.Quantity > 0)
+     .Sum(product => product.Price * product.Quantity);
+
+    }
 
     public void SellProduct(Guid productId, int quantity)
     {

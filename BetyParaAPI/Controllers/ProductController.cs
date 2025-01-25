@@ -91,9 +91,22 @@ public class ProductController : ControllerBase
         return Ok("Product deleted successfully");
     }
 
-   
 
-  
+    [HttpGet("total-value")]
+    public IActionResult GetTotalValueOfProducts()
+    {
+        try
+        {
+            var totalValue = _productService.GetTotalValueOfProducts();
+            return Ok(new { TotalValue = totalValue });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred", Details = ex.Message });
+        }
+    }
+
+
     [HttpGet("{productId}/stock")]
     public IActionResult CheckStock(Guid productId)
     {
