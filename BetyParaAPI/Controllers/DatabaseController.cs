@@ -32,7 +32,7 @@ namespace BetyParaAPI.Controllers
             try
             {
                 string backupPath = GetBackupPath(backupFileName);
-                string sqlCommand = $"/C sqlcmd -S DESKTOP-1PPINIT\\SQLEXPRESS -Q \"BACKUP DATABASE [{dbName}] TO DISK='{backupPath}' WITH NOFORMAT, NOINIT, NAME='{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS=10\"";
+                string sqlCommand = $"/C sqlcmd -S DESKTOP-H9JTM29\\SQLEXPRESS -Q \"BACKUP DATABASE [{dbName}] TO DISK='{backupPath}' WITH NOFORMAT, NOINIT, NAME='{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS=10\"";
 
                 using (Process process = new Process())
                 {
@@ -73,7 +73,7 @@ namespace BetyParaAPI.Controllers
             try
             {
                 string backupPath = GetBackupPath(backupFileName);
-                string sqlCommand = $"/C sqlcmd -S DESKTOP-1PPINIT\\SQLEXPRESS -Q \"RESTORE DATABASE [{dbName}] FROM DISK='{backupPath}' WITH REPLACE\"";
+                string sqlCommand = $"/C sqlcmd -S DESKTOP-H9JTM29\\SQLEXPRESS -Q \"RESTORE DATABASE [{dbName}] FROM DISK='{backupPath}' WITH REPLACE\"";
 
                 using (Process process = new Process())
                 {

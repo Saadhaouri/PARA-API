@@ -58,6 +58,14 @@ public class SalesController : ControllerBase
         return Ok(new { TotalWeeklyProfit = totalProfit });
     }
 
+
+    [HttpGet("capital-benefits")]
+    public ActionResult<IEnumerable<CapitalBenefitDto>> GetCapitalAndBenefits([FromQuery] int year, [FromQuery] int? month)
+    {
+        var data = _salesService.GetCapitalAndBenefits(year, month);
+        return Ok(data);
+    }
+
     [HttpGet("total-monthly-profit")]
     public IActionResult GetTotalMonthlyProfit()
     {
@@ -108,4 +116,28 @@ public class SalesController : ControllerBase
         var monthlyBenefits = _salesService.GetMonthlyBenefits();
         return Ok(monthlyBenefits);
     }
+
+    [HttpGet("total-daily-capital")]
+    public IActionResult GetTotalDailyCapital()
+    {
+        var totalCapital = _salesService.GetTotalDailyCapital();
+        return Ok(new { TotalDailyCapital = totalCapital });
+    }
+
+    [HttpGet("total-weekly-capital")]
+    public IActionResult GetTotalWeeklyCapital()
+    {
+        var totalCapital = _salesService.GetTotalWeeklyCapital();
+        return Ok(new { TotalWeeklyCapital = totalCapital });
+    }
+
+    [HttpGet("total-monthly-capital")]
+    public IActionResult GetTotalMonthlyCapital()
+    {
+        var totalCapital = _salesService.GetTotalMonthlyCapital();
+        return Ok(new { TotalMonthlyCapital = totalCapital });
+    }
+
+
+
 }

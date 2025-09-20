@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\BetyParaAPI\\BetyParaAPI.csproj": {}
+    "C:\\Users\\boutf\\source\\repos\\PARA-API\\BetyParaAPI\\BetyParaAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\BetyParaAPI\\BetyParaAPI.csproj": {
+    "C:\\Users\\boutf\\source\\repos\\PARA-API\\BetyParaAPI\\BetyParaAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\BetyParaAPI\\BetyParaAPI.csproj",
+        "projectUniqueName": "C:\\Users\\boutf\\source\\repos\\PARA-API\\BetyParaAPI\\BetyParaAPI.csproj",
         "projectName": "BetyParaAPI",
-        "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\BetyParaAPI\\BetyParaAPI.csproj",
-        "packagesPath": "C:\\Users\\helal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\BetyParaAPI\\obj\\",
+        "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\BetyParaAPI\\BetyParaAPI.csproj",
+        "packagesPath": "C:\\Users\\boutf\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\BetyParaAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\helal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\boutf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,11 +32,11 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Core\\Core.csproj": {
-                "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Core\\Core.csproj"
+              "C:\\Users\\boutf\\source\\repos\\PARA-API\\Core\\Core.csproj": {
+                "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Core\\Core.csproj"
               },
-              "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Infra\\Infra.csproj": {
-                "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Infra\\Infra.csproj"
+              "C:\\Users\\boutf\\source\\repos\\PARA-API\\Infra\\Infra.csproj": {
+                "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Infra\\Infra.csproj"
               }
             }
           }
@@ -41,7 +45,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net7.0": {
@@ -93,21 +103,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Core\\Core.csproj": {
+    "C:\\Users\\boutf\\source\\repos\\PARA-API\\Core\\Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Core\\Core.csproj",
+        "projectUniqueName": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Core\\Core.csproj",
         "projectName": "Core",
-        "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Core\\Core.csproj",
-        "packagesPath": "C:\\Users\\helal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Core\\obj\\",
+        "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Core\\Core.csproj",
+        "packagesPath": "C:\\Users\\boutf\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Core\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\helal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\boutf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -121,8 +135,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Domaine\\Domaine.csproj": {
-                "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Domaine\\Domaine.csproj"
+              "C:\\Users\\boutf\\source\\repos\\PARA-API\\Domaine\\Domaine.csproj": {
+                "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Domaine\\Domaine.csproj"
               }
             }
           }
@@ -131,7 +145,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net7.0": {
@@ -176,21 +196,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Domaine\\Domaine.csproj": {
+    "C:\\Users\\boutf\\source\\repos\\PARA-API\\Domaine\\Domaine.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Domaine\\Domaine.csproj",
+        "projectUniqueName": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Domaine\\Domaine.csproj",
         "projectName": "Domaine",
-        "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Domaine\\Domaine.csproj",
-        "packagesPath": "C:\\Users\\helal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Domaine\\obj\\",
+        "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Domaine\\Domaine.csproj",
+        "packagesPath": "C:\\Users\\boutf\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Domaine\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\helal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\boutf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -210,7 +234,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net7.0": {
@@ -265,21 +295,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Infra\\Infra.csproj": {
+    "C:\\Users\\boutf\\source\\repos\\PARA-API\\Infra\\Infra.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Infra\\Infra.csproj",
+        "projectUniqueName": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Infra\\Infra.csproj",
         "projectName": "Infra",
-        "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Infra\\Infra.csproj",
-        "packagesPath": "C:\\Users\\helal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Infra\\obj\\",
+        "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Infra\\Infra.csproj",
+        "packagesPath": "C:\\Users\\boutf\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Infra\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\helal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\boutf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -293,11 +327,11 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Core\\Core.csproj": {
-                "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Core\\Core.csproj"
+              "C:\\Users\\boutf\\source\\repos\\PARA-API\\Core\\Core.csproj": {
+                "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Core\\Core.csproj"
               },
-              "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Domaine\\Domaine.csproj": {
-                "projectPath": "C:\\Users\\helal\\OneDrive\\Bureau\\Para\\ParaPharmacyAPI\\Domaine\\Domaine.csproj"
+              "C:\\Users\\boutf\\source\\repos\\PARA-API\\Domaine\\Domaine.csproj": {
+                "projectPath": "C:\\Users\\boutf\\source\\repos\\PARA-API\\Domaine\\Domaine.csproj"
               }
             }
           }
@@ -306,7 +340,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net7.0": {
@@ -361,7 +401,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

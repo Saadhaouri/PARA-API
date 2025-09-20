@@ -1001,7 +1001,10 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.18"
         },
         "runtime": {
-          "Core.dll": {}
+          "Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "Domaine/1.0.0": {
@@ -1013,7 +1016,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.18"
         },
         "runtime": {
-          "Domaine.dll": {}
+          "Domaine.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "Infra/1.0.0": {
@@ -1027,7 +1033,10 @@
           "Microsoft.SqlServer.SqlManagementObjects": "171.30.0"
         },
         "runtime": {
-          "Infra.dll": {}
+          "Infra.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

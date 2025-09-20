@@ -740,7 +740,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.18"
         },
         "runtime": {
-          "Domaine.dll": {}
+          "Domaine.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "tWXSI/OWQkKaHCuAQcmDN/Pp4YYyootkXFIcn7XzFSo=",
+  "Hash": "FvHgkgeQKVQQ7G9yK8gu6ElPLy08CTCf8WS2/vMiUK0=",
   "Source": "BetyParaAPI",
   "BasePath": "_content/BetyParaAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }
