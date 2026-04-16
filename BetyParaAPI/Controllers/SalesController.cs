@@ -3,6 +3,7 @@ using BetyParaAPI.ViewModel;
 using Core.Application.Dto_s;
 using Core.Application.Interface.IService;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace BetyParaAPI.Controllers;
@@ -58,9 +59,10 @@ public class SalesController : ControllerBase
         return Ok(new { TotalWeeklyProfit = totalProfit });
     }
 
-
     [HttpGet("capital-benefits")]
-    public ActionResult<IEnumerable<CapitalBenefitDto>> GetCapitalAndBenefits([FromQuery] int year, [FromQuery] int? month)
+    public ActionResult<IEnumerable<CapitalBenefitDto>> GetCapitalAndBenefits(
+        [FromQuery] int year,
+        [FromQuery] int? month)
     {
         var data = _salesService.GetCapitalAndBenefits(year, month);
         return Ok(data);
@@ -81,20 +83,82 @@ public class SalesController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var saleDto = _mapper.Map<SaleDto>(saleViewModel);
-        _salesService.AddSale(saleDto);
+        try
+        {
+            var saleDto = _mapper.Map<SaleDto>(saleViewModel);
+            _salesService.AddSale(saleDto);
 
-        return Ok("Sale added successfully");
+            return Ok("Sale added successfully");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult UpdateSale(Guid id, [FromBody] AddSaleViewModel saleViewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var saleDto = _mapper.Map<SaleDto>(saleViewModel);
+            _salesService.UpdateSale(id, saleDto);
+
+            return Ok("Sale updated successfully");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteSale(Guid id)
+    {
+        try
+        {
+            _salesService.DeleteSale(id);
+            return Ok("Sale deleted successfully");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 
     [HttpGet("all-sales")]
-    public IActionResult GetAllSales()
+    public IActionResult GetAllSales([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
-        var salesDto = _salesService.GetAllSales();
-        var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
-        return Ok(salesViewModel);
-    }
+        try
+        {
+            var salesDto = _salesService.GetAllSales(page, pageSize);
 
+            var salesViewModel = _mapper.Map<IEnumerable<SaleViewModel>>(salesDto);
+
+            return Ok(salesViewModel);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
     [HttpDelete("delete-all-sales")]
     public IActionResult DeleteAllSales()
     {
@@ -108,7 +172,6 @@ public class SalesController : ControllerBase
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
-
 
     [HttpGet("monthly-benefits")]
     public ActionResult<IEnumerable<MonthlyBenefitViewModel>> GetMonthlyBenefits()
@@ -137,7 +200,4 @@ public class SalesController : ControllerBase
         var totalCapital = _salesService.GetTotalMonthlyCapital();
         return Ok(new { TotalMonthlyCapital = totalCapital });
     }
-
-
-
 }

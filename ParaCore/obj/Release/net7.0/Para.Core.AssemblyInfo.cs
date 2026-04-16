@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Para.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69a29c82951e22e964b283b5b71c259bd1d2f7f4")]
 [assembly: System.Reflection.AssemblyProductAttribute("Para.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Para.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

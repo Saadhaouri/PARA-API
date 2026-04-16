@@ -35,7 +35,8 @@ namespace Infra.Repository
                 FirstName = signUpUser.FirstName,
                 LastName = signUpUser.LastName,
                 Email = signUpUser.Email,
-                UserName = signUpUser.Email
+                UserName = signUpUser.Email , 
+                    userole = signUpUser.userole
             };
 
             return await _userManager.CreateAsync(user, signUpUser.Password);

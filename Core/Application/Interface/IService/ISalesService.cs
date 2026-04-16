@@ -1,23 +1,32 @@
 ﻿using Core.Application.Dto_s;
+using System;
 using System.Collections.Generic;
 
-namespace Core.Application.Interface.IService;
-
-public interface ISalesService
+namespace Core.Application.Interface.IService
 {
-    void AddSale(SaleDto saleDto);
-    IEnumerable<SaleDto> GetDailySales();
-    IEnumerable<SaleDto> GetWeeklySales();
-    IEnumerable<SaleDto> GetMonthlySales();
-    decimal GetTotalDailyProfit();
+    public interface ISalesService
+    {
+        void AddSale(SaleDto saleDto);
+        void UpdateSale(Guid id, SaleDto saleDto);
+        void DeleteSale(Guid id);
 
-    decimal GetTotalWeeklyProfit();
-    decimal GetTotalMonthlyProfit();
-    decimal GetTotalDailyCapital();
-    decimal GetTotalWeeklyCapital();
-    decimal GetTotalMonthlyCapital();
-    IEnumerable<SaleDto> GetAllSales();
-    void DeleteAllSales();
-    IEnumerable<MonthlyBenefitDto> GetMonthlyBenefits();
-    IEnumerable<CapitalBenefitDto> GetCapitalAndBenefits(int year, int? month);
+        IEnumerable<SaleDto> GetDailySales();
+        IEnumerable<SaleDto> GetWeeklySales();
+        IEnumerable<SaleDto> GetMonthlySales();
+        IEnumerable<SaleDto> GetAllSales(int page, int pageSize);
+        IEnumerable<SaleDto> GetLatestSales(int count);
+
+        decimal GetTotalDailyProfit();
+        decimal GetTotalWeeklyProfit();
+        decimal GetTotalMonthlyProfit();
+
+        decimal GetTotalDailyCapital();
+        decimal GetTotalWeeklyCapital();
+        decimal GetTotalMonthlyCapital();
+
+        void DeleteAllSales();
+
+        IEnumerable<MonthlyBenefitDto> GetMonthlyBenefits();
+        IEnumerable<CapitalBenefitDto> GetCapitalAndBenefits(int year, int? month);
+    }
 }

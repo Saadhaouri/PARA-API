@@ -1,12 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "FvHgkgeQKVQQ7G9yK8gu6ElPLy08CTCf8WS2/vMiUK0=",
-  "Source": "BetyParaAPI",
-  "BasePath": "_content/BetyParaAPI",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
-}
+{"Version":1,"Hash":"o7bNu1rDhowtnwFKy9Zxicq+RIncUCAYd/wMdxZHQD8=","Source":"BetyParaAPI","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

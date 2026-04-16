@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Diagnostics;
 using System.IO;
-using System;
+using System.Linq;
 
 namespace BetyParaAPI.Controllers
 {
@@ -9,99 +10,206 @@ namespace BetyParaAPI.Controllers
     [ApiController]
     public class DatabaseController : ControllerBase
     {
-        private string GetBackupPath(string backupFileName)
-        {
-            string basePath = @"C:\Program Files\Microsoft SQL Server";
-            var directories = Directory.GetDirectories(basePath, "MSSQL*");
+        private const string ServerName = @".\SQLEXPRESS";
+        private const string DatabaseName = "Para";
+        private const string BackupFileName = "Para.bak";
 
-            if (directories.Length > 0)
+        private string GetDesktopExportFolder()
+        {
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string exportFolder = Path.Combine(desktopPath, "Exported Data");
+
+            if (!Directory.Exists(exportFolder))
             {
-                string sqlInstancePath = directories[0];
-                return Path.Combine(sqlInstancePath, "MSSQL", "Backup", backupFileName);
+                Directory.CreateDirectory(exportFolder);
             }
 
-            throw new DirectoryNotFoundException("SQL Server instance directory not found.");
+            return exportFolder;
+        }
+
+        private string GetDesktopBackupPath()
+        {
+            return Path.Combine(GetDesktopExportFolder(), BackupFileName);
+        }
+
+        private string GetSqlServerBackupFolder()
+        {
+            string basePath = @"C:\Program Files\Microsoft SQL Server";
+
+            if (!Directory.Exists(basePath))
+            {
+                throw new DirectoryNotFoundException("SQL Server base directory not found.");
+            }
+
+            var backupFolders = Directory
+                .GetDirectories(basePath, "Backup", SearchOption.AllDirectories)
+                .Where(path => path.Contains(@"\MSSQL\Backup") || path.EndsWith(@"\Backup"))
+                .ToList();
+
+            if (backupFolders.Count > 0)
+            {
+                return backupFolders[0];
+            }
+
+            throw new DirectoryNotFoundException("SQL Server Backup folder not found.");
+        }
+
+        private string GetSqlBackupPath()
+        {
+            return Path.Combine(GetSqlServerBackupFolder(), BackupFileName);
+        }
+
+        private (int ExitCode, string Output, string Error) RunSqlCmd(string query)
+        {
+            using Process process = new Process();
+
+            process.StartInfo.FileName = "sqlcmd";
+            process.StartInfo.Arguments = $"-S \"{ServerName}\" -E -C -Q \"{query}\"";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.CreateNoWindow = true;
+
+            process.Start();
+
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+            process.WaitForExit();
+
+            return (process.ExitCode, output, error);
+        }
+
+        private bool HasSqlError(string output, string error)
+        {
+            string allText = $"{output}\n{error}".ToLower();
+
+            return allText.Contains("msg ")
+                || allText.Contains("error")
+                || allText.Contains("access is denied")
+                || allText.Contains("terminating abnormally")
+                || allText.Contains("cannot open backup device");
         }
 
         [HttpGet("backup")]
         public IActionResult BackupDatabase()
         {
-            var dbName = "Para";
-            string backupFileName = "Para.bak";
-
             try
             {
-                string backupPath = GetBackupPath(backupFileName);
-                string sqlCommand = $"/C sqlcmd -S DESKTOP-H9JTM29\\SQLEXPRESS -Q \"BACKUP DATABASE [{dbName}] TO DISK='{backupPath}' WITH NOFORMAT, NOINIT, NAME='{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS=10\"";
+                string sqlBackupPath = GetSqlBackupPath();
+                string desktopBackupPath = GetDesktopBackupPath();
 
-                using (Process process = new Process())
+                if (System.IO.File.Exists(sqlBackupPath))
                 {
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.RedirectStandardError = true;
-                    process.StartInfo.FileName = "cmd.exe";
-                    process.StartInfo.Arguments = sqlCommand;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.Start();
-
-                    string output = process.StandardOutput.ReadToEnd();
-                    string errors = process.StandardError.ReadToEnd();
-                    process.WaitForExit();
-
-                    if (process.ExitCode == 0)
-                    {
-                        return Ok("Backup completed successfully.");
-                    }
-                    else
-                    {
-                        return StatusCode(500, $"Error during backup: {errors}");
-                    }
+                    System.IO.File.Delete(sqlBackupPath);
                 }
+
+                if (System.IO.File.Exists(desktopBackupPath))
+                {
+                    System.IO.File.Delete(desktopBackupPath);
+                }
+
+                string query =
+                    $"BACKUP DATABASE [{DatabaseName}] TO DISK = N'{sqlBackupPath}' " +
+                    $"WITH FORMAT, INIT, NAME = N'{DatabaseName}-Backup', STATS = 10";
+
+                var result = RunSqlCmd(query);
+
+                if (result.ExitCode != 0 || HasSqlError(result.Output, result.Error))
+                {
+                    return StatusCode(500, new
+                    {
+                        message = "Backup failed.",
+                        sqlBackupPath,
+                        desktopBackupPath,
+                        error = result.Error,
+                        output = result.Output
+                    });
+                }
+
+                if (!System.IO.File.Exists(sqlBackupPath))
+                {
+                    return StatusCode(500, new
+                    {
+                        message = "Backup command finished but SQL backup file was not created.",
+                        sqlBackupPath,
+                        output = result.Output,
+                        error = result.Error
+                    });
+                }
+
+                System.IO.File.Copy(sqlBackupPath, desktopBackupPath, true);
+
+                return Ok(new
+                {
+                    message = "Backup completed successfully.",
+                    path = desktopBackupPath,
+                    sqlBackupPath,
+                    output = result.Output
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Server error: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    message = "Server error.",
+                    error = ex.Message
+                });
             }
         }
 
         [HttpGet("import")]
         public IActionResult ImportDatabase()
         {
-            var dbName = "Para";
-            string backupFileName = "Para.bak";
-
             try
             {
-                string backupPath = GetBackupPath(backupFileName);
-                string sqlCommand = $"/C sqlcmd -S DESKTOP-H9JTM29\\SQLEXPRESS -Q \"RESTORE DATABASE [{dbName}] FROM DISK='{backupPath}' WITH REPLACE\"";
+                string desktopBackupPath = GetDesktopBackupPath();
+                string sqlBackupPath = GetSqlBackupPath();
 
-                using (Process process = new Process())
+                if (!System.IO.File.Exists(desktopBackupPath))
                 {
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.RedirectStandardError = true;
-                    process.StartInfo.FileName = "cmd.exe";
-                    process.StartInfo.Arguments = sqlCommand;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.Start();
-
-                    string output = process.StandardOutput.ReadToEnd();
-                    string errors = process.StandardError.ReadToEnd();
-                    process.WaitForExit();
-
-                    if (process.ExitCode == 0)
+                    return NotFound(new
                     {
-                        return Ok("Database import completed successfully.");
-                    }
-                    else
-                    {
-                        return StatusCode(500, $"Error during database import: {errors}");
-                    }
+                        message = "Backup file not found on Desktop.",
+                        path = desktopBackupPath
+                    });
                 }
+
+                System.IO.File.Copy(desktopBackupPath, sqlBackupPath, true);
+
+                string query =
+                    $"RESTORE DATABASE [{DatabaseName}] FROM DISK = N'{sqlBackupPath}' " +
+                    $"WITH REPLACE";
+
+                var result = RunSqlCmd(query);
+
+                if (result.ExitCode != 0 || HasSqlError(result.Output, result.Error))
+                {
+                    return StatusCode(500, new
+                    {
+                        message = "Restore failed.",
+                        sqlBackupPath,
+                        desktopBackupPath,
+                        error = result.Error,
+                        output = result.Output
+                    });
+                }
+
+                return Ok(new
+                {
+                    message = "Database restored successfully.",
+                    path = desktopBackupPath,
+                    sqlBackupPath,
+                    output = result.Output
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Server error: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    message = "Server error.",
+                    error = ex.Message
+                });
             }
         }
     }

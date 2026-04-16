@@ -20,4 +20,8 @@ public class RegisterViewModel
     [Required(ErrorMessage = "Confirm password is required.")]
     [Compare("Password", ErrorMessage = "Passwords do not match.")]
     public string ConfirmPassword { get; set; }
+
+    // 👇 ADD THIS
+    [Required(ErrorMessage = "Role is required.")]
+    public string userole { get; set; }
 }
